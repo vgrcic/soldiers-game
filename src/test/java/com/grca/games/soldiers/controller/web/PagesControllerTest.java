@@ -32,5 +32,11 @@ public class PagesControllerTest {
 		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 		mockMvc.perform(get("/")).andExpect(status().isOk());
 	}
+	
+	@Test
+	public void testLoginPage() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+		mockMvc.perform(get("/login")).andExpect(status().isOk());
+	}
 
 }
