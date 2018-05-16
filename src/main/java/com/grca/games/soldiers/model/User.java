@@ -2,14 +2,29 @@ package com.grca.games.soldiers.model;
 
 import java.util.Collection;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Entity
+@Table(name="users")
 public class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@Column
+	@GeneratedValue
 	private Long id;
+	
+	@Column(length=100, unique=true, nullable=false)
 	private String username;
+	
+	@Column(length=100, nullable=false)
 	private String password;
 	
 	public User(Long id, String username, String password) {
