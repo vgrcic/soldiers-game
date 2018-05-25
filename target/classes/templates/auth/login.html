@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+	<meta charset="UTF-8"></meta>
 	<title>Log in</title>
 </head>
 <body>
-	<form method="POST" action="perform_login">
+	<form method="POST" action="/perform_login">
 		<input type="text" name="username" />
 		<input type="password" name="password" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 		<input type="submit" value="Log in" />
 	</form>
 </body>

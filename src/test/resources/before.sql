@@ -1,2 +1,2 @@
 delete from users;
-insert into users (username, password) values ('user', 'password');
+insert into users (id, username, password) values (1, 'user', 'password');
