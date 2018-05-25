@@ -3,6 +3,7 @@ package com.grca.games.soldiers.service.jpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.grca.games.soldiers.model.User;
@@ -13,7 +14,9 @@ import com.grca.games.soldiers.service.UserService;
 public class JpaUserService implements UserService {
 	
 	@Autowired
-	private JpaUserRepository repository; 
+	private JpaUserRepository repository;
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,6 +30,7 @@ public class JpaUserService implements UserService {
 	public User save(User user) {
 		if (user == null)
 			return null;
+		user.setPassword(encoder.encode(user.getPassword()));
 		return repository.save(user);
 	}
 

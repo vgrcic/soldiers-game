@@ -14,6 +14,7 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.grca.games.soldiers.model.User;
+import com.grca.games.soldiers.service.UserService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -24,6 +25,8 @@ public class JpaUserServiceTest {
 	
 	@Autowired
 	private JpaUserService service;
+	@Autowired
+	private UserService userService;
 
 	@Test
 	public void testAutowiring() {
@@ -32,6 +35,7 @@ public class JpaUserServiceTest {
 	
 	@Test
 	public void testLoadUserByUsername() {
+		userService.save(new User(1L, "user", "password"));
 		UserDetails user = service.loadUserByUsername("user");
 		assertNotNull(user);
 	}
@@ -46,7 +50,7 @@ public class JpaUserServiceTest {
 		assertNotNull(user);
 		assertNotNull(user.getId());
 		assertEquals("username", user.getUsername());
-		assertEquals("password", user.getPassword());
+		assertNotEquals("password", user.getPassword());
 	}
 	
 	@Test
@@ -71,6 +75,7 @@ public class JpaUserServiceTest {
 	
 	@Test
 	public void testGetByRealUsername() {
+		userService.save(new User(1L, "user", "password"));
 		User user = service.getByUsername("user");
 		assertNotNull(user);
 		assertNotNull(user.getId());

@@ -19,7 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.grca.games.soldiers.model.User;
 import com.grca.games.soldiers.model.dto.UserDto;
+import com.grca.games.soldiers.service.UserService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -29,6 +31,8 @@ public class PagesControllerTest {
 	private WebApplicationContext context;
 	@Autowired
 	private PagesController controller;
+	@Autowired
+	private UserService userService;
 
 	@Test
 	public void testAutowiring() {
@@ -80,6 +84,7 @@ public class PagesControllerTest {
 	
 	@Test
 	public void testLoginWithValidCredentials() throws Exception {
+		userService.save(new User(1L, "user", "password"));
 		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mockMvc.perform(post("/perform_login")
 							.param("username", "user")

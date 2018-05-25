@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
 @Configuration
@@ -15,13 +16,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private AuthenticationEntryPoint authEntryPoint;
 	private UserDetailsService userDetailsService;
+	private BCryptPasswordEncoder encoder;
 	private CsrfTokenRepository csrf;
 
 	@Autowired
 	public SpringSecurityConfig(AuthenticationEntryPoint authEntryPoint, UserDetailsService userDetailsService,
-			CsrfTokenRepository csrf) {
+			BCryptPasswordEncoder encoder, CsrfTokenRepository csrf) {
 		this.authEntryPoint = authEntryPoint;
 		this.userDetailsService = userDetailsService;
+		this.encoder = encoder;
 		this.csrf = csrf;
 	}
 
@@ -48,7 +51,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService);
+		auth.userDetailsService(userDetailsService)
+			.passwordEncoder(encoder);
 	}
 	
 	public SpringSecurityConfig() {}
