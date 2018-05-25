@@ -58,5 +58,24 @@ public class JpaUserServiceTest {
 	public void testLoadNonExistingUserByUsername() {
 		service.loadUserByUsername("notauser");
 	}
+	
+	@Test
+	public void testGetByNullUsername() {
+		assertNull(service.getByUsername(null));
+	}
+	
+	@Test
+	public void testGetByFalseUsername() {
+		assertNull(service.getByUsername("notausername"));
+	}
+	
+	@Test
+	public void testGetByRealUsername() {
+		User user = service.getByUsername("user");
+		assertNotNull(user);
+		assertNotNull(user.getId());
+		assertNotNull(user.getUsername());
+		assertNotNull(user.getPassword());
+	}
 
 }

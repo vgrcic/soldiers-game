@@ -30,4 +30,11 @@ public class JpaUserService implements UserService {
 		return repository.save(user);
 	}
 
+	@Override
+	public User getByUsername(String username) {
+		if (username == null)
+			return null;
+		return repository.findByUsername(username);
+	}
+
 }

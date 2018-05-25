@@ -7,5 +7,7 @@ import com.grca.games.soldiers.model.User;
 public interface UserService extends UserDetailsService {
 	
 	User save(User user);
+	
+	User getByUsername(String username);
 
 }

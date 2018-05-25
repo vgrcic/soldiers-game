@@ -1,10 +1,13 @@
 package com.grca.games.soldiers.controller.web;
 
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.grca.games.soldiers.model.dto.UserDto;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -106,6 +111,44 @@ public class PagesControllerTest {
 		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mockMvc.perform(get("/register"))
 					.andExpect(status().is3xxRedirection());
+	}
+	
+	@Test
+	public void testRegisterInvalidUser() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(post("/register").flashAttr("user", new UserDto("re", "password", "password")).with(csrf()))
+					.andExpect(status().isBadRequest())
+					.andExpect(view().name("auth/register"));
+	}
+	
+	@Test
+	public void testRegisterMismatchedPasswordsUser() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(post("/register").flashAttr("user", new UserDto("register", "password1", "password2")).with(csrf()))
+					.andExpect(status().isBadRequest())
+					.andExpect(view().name("auth/register"));
+	}
+	
+	@Test
+	public void testRegisterValidUser() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(post("/register").flashAttr("user", new UserDto("register", "password", "password")).with(csrf()))
+					.andExpect(status().is3xxRedirection());
+	}
+	
+	@Test
+	@WithMockUser
+	public void testLoggedInRegisterUser() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(post("/register").flashAttr("user", new UserDto("loggedin", "password", "password")).with(csrf()))
+					.andExpect(status().is3xxRedirection());
+	}
+	
+	@Test
+	public void testRegisterWithoutCsrf() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(post("/register").flashAttr("user", new UserDto("register", "password", "password")))
+					.andExpect(status().isForbidden());
 	}
 
 }
