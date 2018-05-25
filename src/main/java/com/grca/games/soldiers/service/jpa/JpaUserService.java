@@ -28,7 +28,7 @@ public class JpaUserService implements UserService {
 
 	@Override
 	public User save(User user) {
-		if (user == null)
+		if (user == null || userExists(user.getUsername()))
 			return null;
 		user.setPassword(encoder.encode(user.getPassword()));
 		return repository.save(user);
@@ -39,6 +39,11 @@ public class JpaUserService implements UserService {
 		if (username == null)
 			return null;
 		return repository.findByUsername(username);
+	}
+
+	@Override
+	public boolean userExists(String username) {
+		return getByUsername(username) != null;
 	}
 
 }

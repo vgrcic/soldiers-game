@@ -9,5 +9,7 @@ public interface UserService extends UserDetailsService {
 	User save(User user);
 	
 	User getByUsername(String username);
+	
+	boolean userExists(String username);
 
 }

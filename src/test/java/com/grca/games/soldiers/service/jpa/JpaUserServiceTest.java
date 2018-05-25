@@ -1,6 +1,11 @@
 package com.grca.games.soldiers.service.jpa;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,6 +86,17 @@ public class JpaUserServiceTest {
 		assertNotNull(user.getId());
 		assertNotNull(user.getUsername());
 		assertNotNull(user.getPassword());
+	}
+	
+	@Test
+	public void testRealUserExists() {
+		userService.save(new User(1L, "user", "password"));
+		assertTrue(userService.userExists("user"));
+	}
+	
+	@Test
+	public void testFakeUserExists() {
+		assertFalse(userService.userExists("notauser"));
 	}
 
 }
