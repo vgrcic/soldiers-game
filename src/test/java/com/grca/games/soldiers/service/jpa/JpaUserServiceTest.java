@@ -13,6 +13,8 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.grca.games.soldiers.model.User;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @SqlGroup(value = {
@@ -32,6 +34,24 @@ public class JpaUserServiceTest {
 	public void testLoadUserByUsername() {
 		UserDetails user = service.loadUserByUsername("user");
 		assertNotNull(user);
+	}
+	
+	@Test
+	public void testSaveUser() {
+		User user = new User();
+		user.setUsername("username");
+		user.setPassword("password");
+		
+		user = service.save(user);
+		assertNotNull(user);
+		assertNotNull(user.getId());
+		assertEquals("username", user.getUsername());
+		assertEquals("password", user.getPassword());
+	}
+	
+	@Test
+	public void testSaveNullUser() {
+		assertNull(service.save(null));
 	}
 	
 	@Test(expected=UsernameNotFoundException.class)
