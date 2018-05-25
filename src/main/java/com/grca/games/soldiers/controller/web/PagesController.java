@@ -19,5 +19,12 @@ public class PagesController {
 			return new ModelAndView("redirect:/");
 		return new ModelAndView("auth/login");
 	}
+	
+	@RequestMapping(value="/register")
+	ModelAndView registerPage(WebRequest request) {
+		if (request.getRemoteUser() != null)
+			return new ModelAndView("redirect:/");
+		return new ModelAndView("auth/register");
+	}
 
 }

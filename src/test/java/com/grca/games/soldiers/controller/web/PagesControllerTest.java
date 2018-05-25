@@ -91,5 +91,21 @@ public class PagesControllerTest {
 							.param("password", "password"))
 					.andExpect(status().isForbidden());
 	}
+	
+	@Test
+	public void testRegisterPage() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(get("/register"))
+					.andExpect(status().isOk())
+					.andExpect(view().name("auth/register"));
+	}
+	
+	@Test
+	@WithMockUser
+	public void testLoggedInRegisterPage() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(get("/register"))
+					.andExpect(status().is3xxRedirection());
+	}
 
 }

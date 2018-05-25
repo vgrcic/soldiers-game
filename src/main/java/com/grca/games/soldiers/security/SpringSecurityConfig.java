@@ -30,6 +30,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.csrf().csrfTokenRepository(csrf).and()
 			.authorizeRequests()
+				.antMatchers("/register").permitAll()
 				.anyRequest().authenticated()
 			.and().formLogin()
 				.permitAll()
