@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.grca.games.soldiers.model.User;
 import com.grca.games.soldiers.model.dto.UserDto;
 import com.grca.games.soldiers.service.UserService;
 import com.grca.games.soldiers.support.converter.UserConverter;
@@ -45,17 +46,19 @@ public class PagesController {
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	ModelAndView register(@Valid @ModelAttribute("user") UserDto user, BindingResult result, WebRequest request) {
-		ModelAndView mav = new ModelAndView();
 		if (request.getRemoteUser() != null)
 			return new ModelAndView("redirect:/");
-		if (result.hasErrors() || !user.hasMatchingPasswords()) {
-			mav.setViewName("auth/register");
-			mav.setStatus(HttpStatus.BAD_REQUEST);
-			return mav;
-		}
-		userService.save(userConverter.fromDto(user));
-		mav.setViewName("redirect:/login");
-		mav.setStatus(HttpStatus.OK);
+		if (result.hasErrors() || !user.hasMatchingPasswords())
+			return getMav("auth/register", HttpStatus.BAD_REQUEST);
+		User persisted = userService.save(userConverter.fromDto(user));
+		if (persisted == null)
+			return getMav("auth/register", HttpStatus.BAD_REQUEST);
+		return getMav("redirect:/login", HttpStatus.OK);
+	}
+	
+	private ModelAndView getMav(String viewName, HttpStatus status) {
+		ModelAndView mav = new ModelAndView(viewName);
+		mav.setStatus(status);
 		return mav;
 	}
 

@@ -142,6 +142,15 @@ public class PagesControllerTest {
 	}
 	
 	@Test
+	public void testRegisterDuplicateUser() throws Exception {
+		userService.save(new User(null, "duplicate", "password"));
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mockMvc.perform(post("/register").flashAttr("user", new UserDto("duplicate", "password", "password")).with(csrf()))
+					.andExpect(status().isBadRequest())
+					.andExpect(view().name("auth/register"));
+	}
+	
+	@Test
 	@WithMockUser
 	public void testLoggedInRegisterUser() throws Exception {
 		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
