@@ -41,7 +41,7 @@ public class PagesController {
 	ModelAndView registerPage(WebRequest request) {
 		if (request.getRemoteUser() != null)
 			return new ModelAndView("redirect:/");
-		return new ModelAndView("auth/register");
+		return new ModelAndView("auth/register", "user", new UserDto());
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
