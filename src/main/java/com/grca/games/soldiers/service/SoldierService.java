@@ -7,5 +7,7 @@ public interface SoldierService {
 	Soldier get(Long id);
 	
 	Soldier save(Soldier soldier, String username);
+	
+	Soldier getByNameAndUsername(String name, String username);
 
 }

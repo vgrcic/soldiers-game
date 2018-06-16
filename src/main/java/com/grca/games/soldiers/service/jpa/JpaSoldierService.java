@@ -32,4 +32,11 @@ public class JpaSoldierService implements SoldierService {
 		return repository.save(soldier);
 	}
 
+	@Override
+	public Soldier getByNameAndUsername(String name, String username) {
+		if (name == null || username == null)
+			return null;
+		return repository.findByNameAndUserUsername(name, username);
+	}
+
 }

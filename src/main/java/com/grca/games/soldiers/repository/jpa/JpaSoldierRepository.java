@@ -7,5 +7,7 @@ import com.grca.games.soldiers.model.Soldier;
 
 @Repository
 public interface JpaSoldierRepository extends JpaRepository<Soldier, Long> {
+	
+	Soldier findByNameAndUserUsername(String name, String username);
 
 }

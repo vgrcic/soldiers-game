@@ -64,5 +64,24 @@ public class JpaSoldierServiceTest {
 		Soldier soldier = soldierService.save(new Soldier(null, "newsoldier", null), null);
 		assertNull(soldier);
 	}
+	
+	@Test
+	public void testGetByNameAndUsername() {
+		Soldier soldier = soldierService.getByNameAndUsername("soldier", "player");
+		assertNotNull(soldier);
+		assertEquals("soldier", soldier.getName());
+	}
+	
+	@Test
+	public void testGetByNameAndNullUsername() {
+		Soldier soldier = soldierService.getByNameAndUsername("soldier", null);
+		assertNull(soldier);
+	}
+	
+	@Test
+	public void testGetByNullNameAndUsername() {
+		Soldier soldier = soldierService.getByNameAndUsername(null, "player");
+		assertNull(soldier);
+	}
 
 }
