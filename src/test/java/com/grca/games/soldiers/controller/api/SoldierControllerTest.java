@@ -118,5 +118,11 @@ public class SoldierControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(soldier)
 				.with(csrf())).andExpect(status().isCreated());
 	}
+	
+	@Test
+	@WithMockUser(value="user")
+	public void testGetForUser() throws Exception {
+		mockMvc.perform(get("/api/soldier/").with(csrf())).andExpect(status().isOk());
+	}
 
 }

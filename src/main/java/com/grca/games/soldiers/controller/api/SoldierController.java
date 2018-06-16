@@ -1,5 +1,7 @@
 package com.grca.games.soldiers.controller.api;
 
+import java.util.Collection;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,12 @@ public class SoldierController {
 			return new ResponseEntity<Soldier>(HttpStatus.UNAUTHORIZED);
 		soldier = soldierService.save(soldier, username);
 		return new ResponseEntity<Soldier>(soldier, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public ResponseEntity<Collection<Soldier>> get(WebRequest request) {
+		Collection<Soldier> soldiers = soldierService.getForUser(request.getRemoteUser());
+		return new ResponseEntity<Collection<Soldier>>(soldiers, HttpStatus.OK);
 	}
 	
 }

@@ -2,6 +2,8 @@ package com.grca.games.soldiers.service.jpa;
 
 import static org.junit.Assert.*;
 
+import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +84,12 @@ public class JpaSoldierServiceTest {
 	public void testGetByNullNameAndUsername() {
 		Soldier soldier = soldierService.getByNameAndUsername(null, "player");
 		assertNull(soldier);
+	}
+	
+	@Test
+	public void testGetForUser() {
+		Collection<Soldier> soldiers = soldierService.getForUser("player");
+		assertNotNull(soldiers);
 	}
 
 }

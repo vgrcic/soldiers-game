@@ -1,5 +1,7 @@
 package com.grca.games.soldiers.service.jpa;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,11 @@ public class JpaSoldierService implements SoldierService {
 		if (name == null || username == null)
 			return null;
 		return repository.findByNameAndUserUsername(name, username);
+	}
+
+	@Override
+	public Collection<Soldier> getForUser(String username) {
+		return repository.findByUserUsername(username);
 	}
 
 }
