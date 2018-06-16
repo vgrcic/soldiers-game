@@ -26,7 +26,7 @@ public class JpaSoldierService implements SoldierService {
 	@Override
 	public Soldier save(Soldier soldier, String username) {
 		User user = userService.getByUsername(username);
-		if (user == null)
+		if (user == null || getByNameAndUsername(soldier.getName(), username) != null)
 			return null;
 		soldier.setUser(user);
 		return repository.save(soldier);
