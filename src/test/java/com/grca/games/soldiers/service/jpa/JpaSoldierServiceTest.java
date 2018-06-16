@@ -6,12 +6,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.grca.games.soldiers.model.Soldier;
 import com.grca.games.soldiers.service.SoldierService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@SqlGroup(value = {
+		@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:before.sql")
+})
 public class JpaSoldierServiceTest {
 	
 	@Autowired
@@ -20,6 +27,24 @@ public class JpaSoldierServiceTest {
 	@Test
 	public void testAutowiring() {
 		assertNotNull(soldierService);
+	}
+	
+	@Test
+	public void testGetSoldier() {
+		Soldier soldier = soldierService.get(1L);
+		assertNotNull(soldier);
+	}
+	
+	@Test
+	public void testGetNonExistantSoldier() {
+		Soldier soldier = soldierService.get(2L);
+		assertNull(soldier);
+	}
+	
+	@Test
+	public void testGetSoldierByNullID() {
+		Soldier soldier = soldierService.get(null);
+		assertNull(soldier);
 	}
 
 }
