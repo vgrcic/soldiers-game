@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="soldiers", uniqueConstraints=@UniqueConstraint(columnNames={"name", "user_id"}))
@@ -19,6 +20,7 @@ public class Soldier {
 	private Long id;
 	
 	@Column
+	@Size(min=3, max=50)
 	private String name;
 	
 	@ManyToOne
