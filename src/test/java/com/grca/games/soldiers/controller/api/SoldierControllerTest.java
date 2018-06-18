@@ -87,7 +87,7 @@ public class SoldierControllerTest {
 		String soldier = json.writeValueAsString(new Soldier(null, "createdSoldier", null));
 		mockMvc.perform(post("/api/soldier/")
 				.contentType(MediaType.APPLICATION_JSON).content(soldier)
-				.with(csrf())).andExpect(status().isUnauthorized());
+				.with(csrf())).andExpect(status().isBadRequest());
 	}
 	
 	@Test

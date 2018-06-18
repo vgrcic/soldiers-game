@@ -38,11 +38,11 @@ public class SoldierController {
 	@RequestMapping(value="/", method=RequestMethod.POST, consumes="application/json")
 	public ResponseEntity<Soldier> save(@RequestBody @Valid Soldier soldier, BindingResult result, WebRequest request) {
 		String username = request.getRemoteUser();
-		if (result.hasErrors() || soldierService.getByNameAndUsername(soldier.getName(), username) != null)
+		if (result.hasErrors())
 			return new ResponseEntity<Soldier>(HttpStatus.BAD_REQUEST);
 		soldier = soldierService.save(soldier, username);
 		if (soldier == null)
-			return new ResponseEntity<Soldier>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Soldier>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Soldier>(soldier, HttpStatus.CREATED);
 	}
 	
