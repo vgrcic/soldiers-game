@@ -17,7 +17,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.grca.games.soldiers.model.Soldier;
 import com.grca.games.soldiers.service.SoldierService;
-import com.grca.games.soldiers.service.UserService;
 
 @Controller
 @RequestMapping("/api/soldier")
@@ -25,8 +24,6 @@ public class SoldierController {
 	
 	@Autowired
 	private SoldierService soldierService;
-	@Autowired
-	private UserService userService;
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Soldier> get(@PathVariable Long id, WebRequest request) {
@@ -43,9 +40,9 @@ public class SoldierController {
 		String username = request.getRemoteUser();
 		if (result.hasErrors() || soldierService.getByNameAndUsername(soldier.getName(), username) != null)
 			return new ResponseEntity<Soldier>(HttpStatus.BAD_REQUEST);
-		if (userService.getByUsername(username) == null)
-			return new ResponseEntity<Soldier>(HttpStatus.UNAUTHORIZED);
 		soldier = soldierService.save(soldier, username);
+		if (soldier == null)
+			return new ResponseEntity<Soldier>(HttpStatus.UNAUTHORIZED);
 		return new ResponseEntity<Soldier>(soldier, HttpStatus.CREATED);
 	}
 	
