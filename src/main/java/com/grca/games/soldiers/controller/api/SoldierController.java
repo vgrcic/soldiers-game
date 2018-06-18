@@ -19,7 +19,7 @@ import com.grca.games.soldiers.model.Soldier;
 import com.grca.games.soldiers.service.SoldierService;
 
 @Controller
-@RequestMapping("/api/soldier")
+@RequestMapping("api/soldiers")
 public class SoldierController {
 	
 	@Autowired
