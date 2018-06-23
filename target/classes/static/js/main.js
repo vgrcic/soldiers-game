@@ -17,6 +17,16 @@ app.controller('soldierController', function($scope, $http) {
 			})
 	}
 
+	$scope.deleteSoldier = function(id) {
+		$http.delete('/api/soldiers/' + id)
+			.success(function() {
+				loadSoldiers();
+			})
+			.error(function() {
+				alert('Could not delete soldier.');
+			})
+	}
+
 	loadSoldiers();
 
 });

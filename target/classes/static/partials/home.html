@@ -2,6 +2,6 @@
 
 <table>
 	<tr ng-repeat="soldier in soldiers">
-		<td>{{soldier.name}}</td>
+		<td>{{soldier.name}}</td><td><button ng-click="deleteSoldier(soldier.id)">delete</button></td>
 	</tr>
 </table>

@@ -36,9 +36,10 @@ public class Soldier {
 	public Soldier() {}
 	
 	/**
-	 * Checks if the provided username matches the username of the user owning the Soldier entity.
+	 * Checks if the provided username matches the username of the user owning the Soldier entity.<br>
+	 * Returns false if either username or user are null.
 	 * @param username - {@code String}
-	 * @return
+	 * @return {@code true} - if usernames match<br>{@code false} - if usernames do not match, or if username is {@code null}, or if User is {@code null}
 	 */
 	public boolean belongsTo(String username) {
 		if (user != null && username != null)
