@@ -46,4 +46,10 @@ public class JpaSoldierService implements SoldierService {
 		return repository.findByUserUsername(username);
 	}
 
+	@Override
+	public void delete(Long id) {
+		if (id != null)
+			repository.delete(id);
+	}
+
 }

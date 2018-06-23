@@ -36,5 +36,11 @@ public interface SoldierService {
 	 * @return {@code Collection<Soldier>}
 	 */
 	Collection<Soldier> getForUser(String username);
+	
+	/**
+	 * Deletes a {@code Soldier} entity with a given ID.
+	 * @param id - {@code Long}
+	 */
+	void delete(Long id);
 
 }

@@ -31,7 +31,7 @@ import com.grca.games.soldiers.service.UserService;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @SqlGroup(value = {
-		@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:before-soldier-controller.sql")
+		@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:before-soldier-test.sql")
 })
 public class SoldierControllerTest {
 	

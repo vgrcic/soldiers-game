@@ -19,7 +19,7 @@ import com.grca.games.soldiers.service.SoldierService;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @SqlGroup(value = {
-		@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:before.sql")
+		@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:before-soldier-test.sql")
 })
 public class JpaSoldierServiceTest {
 	
@@ -90,6 +90,19 @@ public class JpaSoldierServiceTest {
 	public void testGetForUser() {
 		Collection<Soldier> soldiers = soldierService.getForUser("player");
 		assertNotNull(soldiers);
+	}
+	
+	@Test
+	public void deleteUser() {
+		Soldier soldier = soldierService.get(3L);
+		assertNotNull(soldier);
+		soldierService.delete(3L);
+		assertNull(soldierService.get(3L));
+	}
+	
+	@Test
+	public void deleteUserByNullId() {
+		soldierService.delete(null);
 	}
 
 }
