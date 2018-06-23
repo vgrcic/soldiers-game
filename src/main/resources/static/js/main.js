@@ -27,6 +27,18 @@ app.controller('soldierController', function($scope, $http) {
 			})
 	}
 
+	$scope.createSoldier = function() {
+		var soldier = {name: $scope.soldier_name}
+		$http.post('/api/soldiers/', soldier)
+			.success(function() {
+				$scope.soldier_name = '';
+				loadSoldiers();
+			})
+			.error(function() {
+				alert('Could not create soldier.');
+			});
+	}
+
 	loadSoldiers();
 
 });
