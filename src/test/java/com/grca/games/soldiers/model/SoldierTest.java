@@ -48,5 +48,26 @@ public class SoldierTest {
 		soldier.setUser(user);
 		assertEquals(user, soldier.getUser());
 	}
+	
+	@Test
+	public void testBelongsTo() {
+		User user = new User(2L, "player", "password");
+		soldier = new Soldier(1L, "soldier", user);
+		assertTrue(soldier.belongsTo("player"));
+	}
+	
+	@Test
+	public void testBelongsToNull() {
+		User user = new User(2L, "player", "password");
+		soldier = new Soldier(1L, "soldier", user);
+		assertFalse(soldier.belongsTo(null));
+	}
+	
+	@Test
+	public void testBelongsToOther() {
+		User user = new User(2L, "player", "password");
+		soldier = new Soldier(1L, "soldier", user);
+		assertFalse(soldier.belongsTo("otherplayer"));
+	}
 
 }

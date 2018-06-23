@@ -34,7 +34,7 @@ public class SoldierController {
 		Soldier soldier = soldierService.get(id);
 		if (soldier == null)
 			return new ResponseEntity<SoldierDto>(HttpStatus.NOT_FOUND);
-		if (!soldier.getUser().getUsername().equals(request.getRemoteUser()))
+		if (!soldier.belongsTo(request.getRemoteUser()))
 			return new ResponseEntity<SoldierDto>(HttpStatus.UNAUTHORIZED);
 		return new ResponseEntity<SoldierDto>(dto.withoutUser(soldier), HttpStatus.OK);
 	}
@@ -54,6 +54,15 @@ public class SoldierController {
 	public ResponseEntity<Collection<SoldierDto>> get(WebRequest request) {
 		Collection<Soldier> soldiers = soldierService.getForUser(request.getRemoteUser());
 		return new ResponseEntity<Collection<SoldierDto>>(dto.withoutUsers(soldiers), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Soldier> delete(@PathVariable Long id, WebRequest request) {
+		Soldier soldier = soldierService.get(id);
+		if (!soldier.belongsTo(request.getRemoteUser()))
+			return new ResponseEntity<Soldier>(HttpStatus.UNAUTHORIZED);
+		soldierService.delete(id);
+		return new ResponseEntity<Soldier>(HttpStatus.OK);
 	}
 	
 }

@@ -35,6 +35,17 @@ public class Soldier {
 	
 	public Soldier() {}
 	
+	/**
+	 * Checks if the provided username matches the username of the user owning the Soldier entity.
+	 * @param username - {@code String}
+	 * @return
+	 */
+	public boolean belongsTo(String username) {
+		if (user != null && username != null)
+			return username.equals(user.getUsername());
+		return false;
+	}
+	
 	public Long getId() { return id; }
 	public void setId(Long id) { this.id = id; }
 	public String getName() { return name; }

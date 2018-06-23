@@ -3,8 +3,7 @@ package com.grca.games.soldiers.controller.api;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -62,6 +61,13 @@ public class SoldierControllerTest {
 	public void testGetSoldier() throws Exception {
 		mockMvc.perform(get("/api/soldiers/1").with(csrf()))
 					.andExpect(status().is2xxSuccessful());
+	}
+	
+	@Test
+	@WithMockUser(value="player")
+	public void testGetNullSoldier() throws Exception {
+		mockMvc.perform(get("/api/soldiers/5").with(csrf()))
+					.andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -129,6 +135,18 @@ public class SoldierControllerTest {
 	@WithMockUser(value="user")
 	public void testGetForUser() throws Exception {
 		mockMvc.perform(get("/api/soldiers/").with(csrf())).andExpect(status().isOk());
+	}
+	
+	@Test
+	@WithMockUser(value="player")
+	public void testDelete() throws Exception {
+		mockMvc.perform(delete("/api/soldiers/3").with(csrf())).andExpect(status().isOk());
+	}
+	
+	@Test
+	@WithMockUser(value="user")
+	public void testDeleteOtherUsersSoldier() throws Exception {
+		mockMvc.perform(delete("/api/soldiers/4").with(csrf())).andExpect(status().isUnauthorized());
 	}
 
 }
