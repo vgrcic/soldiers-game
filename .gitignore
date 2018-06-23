@@ -1,2 +1,3 @@
 *.class
 application.properties
+TestData.*

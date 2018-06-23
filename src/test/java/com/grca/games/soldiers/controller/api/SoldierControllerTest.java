@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,6 +30,9 @@ import com.grca.games.soldiers.service.UserService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@SqlGroup(value = {
+		@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:before-soldier-controller.sql")
+})
 public class SoldierControllerTest {
 	
 	@Autowired
@@ -54,14 +60,14 @@ public class SoldierControllerTest {
 	@Test
 	@WithMockUser(value="player")
 	public void testGetSoldier() throws Exception {
-		mockMvc.perform(get("/api/soldier/1").with(csrf()))
+		mockMvc.perform(get("/api/soldiers/1").with(csrf()))
 					.andExpect(status().is2xxSuccessful());
 	}
 	
 	@Test
 	@WithMockUser(value="user")
 	public void testGetSoldierBadUsername() throws Exception {
-		mockMvc.perform(get("/api/soldier/1").with(csrf()))
+		mockMvc.perform(get("/api/soldiers/1").with(csrf()))
 					.andExpect(status().isUnauthorized());
 	}
 	
@@ -76,7 +82,7 @@ public class SoldierControllerTest {
 	@WithMockUser(value="player")
 	public void testSaveSoldier() throws Exception {
 		String soldier = json.writeValueAsString(new Soldier(null, "createdSoldier", null));
-		mockMvc.perform(post("/api/soldier/")
+		mockMvc.perform(post("/api/soldiers/")
 				.contentType(MediaType.APPLICATION_JSON).content(soldier)
 				.with(csrf())).andExpect(status().isCreated());
 	}
@@ -85,7 +91,7 @@ public class SoldierControllerTest {
 	@WithMockUser(value="playen")
 	public void testSaveSoldierBadUsername() throws Exception {
 		String soldier = json.writeValueAsString(new Soldier(null, "createdSoldier", null));
-		mockMvc.perform(post("/api/soldier/")
+		mockMvc.perform(post("/api/soldiers/")
 				.contentType(MediaType.APPLICATION_JSON).content(soldier)
 				.with(csrf())).andExpect(status().isBadRequest());
 	}
@@ -94,7 +100,7 @@ public class SoldierControllerTest {
 	@WithMockUser(value="player")
 	public void testSaveSoldierShortName() throws Exception {
 		String soldier = json.writeValueAsString(new Soldier(null, "cr", null));
-		mockMvc.perform(post("/api/soldier/")
+		mockMvc.perform(post("/api/soldiers/")
 				.contentType(MediaType.APPLICATION_JSON).content(soldier)
 				.with(csrf())).andExpect(status().isBadRequest());
 	}
@@ -104,7 +110,7 @@ public class SoldierControllerTest {
 	public void testSaveSoldierDuplicate() throws Exception {
 		service.save(new Soldier(null, "duplicate", null), "player");
 		String soldier = json.writeValueAsString(new Soldier(null, "duplicate", null));
-		mockMvc.perform(post("/api/soldier/")
+		mockMvc.perform(post("/api/soldiers/")
 				.contentType(MediaType.APPLICATION_JSON).content(soldier)
 				.with(csrf())).andExpect(status().isBadRequest());
 	}
@@ -114,7 +120,7 @@ public class SoldierControllerTest {
 	public void testSaveSoldierNotDuplicate() throws Exception {
 		userService.save(new User(null, "user", "password"));
 		String soldier = json.writeValueAsString(new Soldier(null, "duplicate", null));
-		mockMvc.perform(post("/api/soldier/")
+		mockMvc.perform(post("/api/soldiers/")
 				.contentType(MediaType.APPLICATION_JSON).content(soldier)
 				.with(csrf())).andExpect(status().isCreated());
 	}
@@ -122,7 +128,7 @@ public class SoldierControllerTest {
 	@Test
 	@WithMockUser(value="user")
 	public void testGetForUser() throws Exception {
-		mockMvc.perform(get("/api/soldier/").with(csrf())).andExpect(status().isOk());
+		mockMvc.perform(get("/api/soldiers/").with(csrf())).andExpect(status().isOk());
 	}
 
 }

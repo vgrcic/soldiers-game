@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import com.grca.games.soldiers.model.Soldier;
+import com.grca.games.soldiers.model.dto.SoldierDto;
 import com.grca.games.soldiers.service.SoldierService;
+import com.grca.games.soldiers.support.converter.SoldierConverter;
 
 @Controller
 @RequestMapping("api/soldiers")
@@ -24,15 +26,17 @@ public class SoldierController {
 	
 	@Autowired
 	private SoldierService soldierService;
+	@Autowired
+	private SoldierConverter dto;
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Soldier> get(@PathVariable Long id, WebRequest request) {
+	public ResponseEntity<SoldierDto> get(@PathVariable Long id, WebRequest request) {
 		Soldier soldier = soldierService.get(id);
 		if (soldier == null)
-			return new ResponseEntity<Soldier>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<SoldierDto>(HttpStatus.NOT_FOUND);
 		if (!soldier.getUser().getUsername().equals(request.getRemoteUser()))
-			return new ResponseEntity<Soldier>(HttpStatus.UNAUTHORIZED);
-		return new ResponseEntity<Soldier>(soldier, HttpStatus.OK);
+			return new ResponseEntity<SoldierDto>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<SoldierDto>(dto.withoutUser(soldier), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.POST, consumes="application/json")
@@ -47,9 +51,9 @@ public class SoldierController {
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public ResponseEntity<Collection<Soldier>> get(WebRequest request) {
+	public ResponseEntity<Collection<SoldierDto>> get(WebRequest request) {
 		Collection<Soldier> soldiers = soldierService.getForUser(request.getRemoteUser());
-		return new ResponseEntity<Collection<Soldier>>(soldiers, HttpStatus.OK);
+		return new ResponseEntity<Collection<SoldierDto>>(dto.withoutUsers(soldiers), HttpStatus.OK);
 	}
 	
 }
